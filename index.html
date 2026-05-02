@@ -474,6 +474,63 @@ input[type=range]::-webkit-slider-thumb {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .app { padding: 16px 12px 100px; }
+
+  .app-title { font-size: 20px; }
+  .app-date { font-size: 12px; }
+
+  /* Tabs — smaller text, fit all 5 */
+  .tabs { padding: 3px; gap: 1px; }
+  .tab-btn { font-size: 11px; padding: 7px 2px; }
+
+  /* Cards — more breathing room for fingers */
+  .task-card { padding: 12px; }
+  .task-name { font-size: 14px; }
+  .check-btn { width: 22px; height: 22px; flex-shrink: 0; }
+
+  /* Icon buttons — bigger tap targets */
+  .icon-btn { width: 34px; height: 34px; font-size: 16px; }
+
+  /* Add form */
+  .add-input { font-size: 16px; } /* prevents iOS zoom on focus */
+  .modal-input { font-size: 16px; } /* same */
+
+  /* Stage buttons — wrap nicely */
+  .stage-btns { gap: 6px; }
+  .stage-btn { padding: 6px 12px; font-size: 12px; }
+
+  /* Schedule buttons */
+  .schedule-btn { padding: 6px 12px; font-size: 12px; }
+
+  /* Meal grid — 2 columns on mobile */
+  .meal-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .meal-name { font-size: 12px; }
+
+  /* Modal — full width on mobile */
+  .modal-overlay { padding: 12px; align-items: flex-end; }
+  .modal {
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    max-height: 92vh;
+  }
+
+  /* Meal type buttons */
+  .meal-type-btns { gap: 6px; }
+  .meal-type-btn { padding: 7px 14px; font-size: 13px; }
+
+  /* Add trigger */
+  .add-trigger { padding: 14px; font-size: 14px; }
+
+  /* Rollover banner */
+  .rollover-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* Bottom safe area for phones with home bar */
+  .app { padding-bottom: 120px; }
+}
 </style>
 </head>
 <body>
@@ -731,7 +788,7 @@ function hideAddForm(list) {
   document.getElementById('addInput-' + list).value = '';
 }
 
-function addTask(list) {
+function addTask(list, keepOpen = false) {
   const input = document.getElementById('addInput-' + list);
   const name = input.value.trim();
   if (!name) return;
@@ -749,8 +806,14 @@ function addTask(list) {
   if (!localData[list]) localData[list] = [];
   localData[list].push(task);
   saveData();
-  hideAddForm(list);
+  input.value = '';
   renderList(list);
+  if (keepOpen) {
+    // Stay open, refocus for next task
+    setTimeout(() => input.focus(), 50);
+  } else {
+    hideAddForm(list);
+  }
 }
 
 // ── TOGGLE COMPLETE ──
@@ -972,12 +1035,15 @@ function renderAll() {
 
 // ── KEYBOARD SHORTCUTS ──
 document.addEventListener('keydown', e => {
+  const input = document.activeElement;
+  if (!input || !input.classList.contains('add-input')) return;
+  const list = input.id.replace('addInput-', '');
   if (e.key === 'Enter') {
-    const active = document.querySelector('.add-form:not([style*="display: none"]) .add-input:focus');
-    if (active) {
-      const list = active.id.replace('addInput-', '');
-      addTask(list);
-    }
+    e.preventDefault();
+    addTask(list, true); // keep form open for next task
+  }
+  if (e.key === 'Escape') {
+    hideAddForm(list);
   }
 });
 
