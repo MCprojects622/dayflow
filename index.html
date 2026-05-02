@@ -471,103 +471,38 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 /* ── SUBTASKS ── */
-.subtask-count {
-  font-size: 11px;
-  padding: 2px 7px;
-  border-radius: 99px;
-  background: var(--surface2);
-  color: var(--text-muted);
-  font-weight: 500;
-  cursor: pointer;
-}
-.subtask-count.all-done {
-  background: var(--accent-bg);
-  color: var(--accent-text);
-}
+.subtask-count { font-size: 11px; padding: 2px 7px; border-radius: 99px; background: var(--surface2); color: var(--text-muted); font-weight: 500; cursor: pointer; }
+.subtask-count.all-done { background: var(--accent-bg); color: var(--accent-text); }
 .subtask-list { margin-bottom: 8px; }
-.subtask-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 0;
-  border-bottom: 0.5px solid var(--border);
-}
+.subtask-item { flex-direction: column; padding: 6px 0; border-bottom: 0.5px solid var(--border); }
 .subtask-item:last-child { border-bottom: none; }
-.subtask-check {
-  width: 15px;
-  height: 15px;
-  border-radius: 3px;
-  border: 1.5px solid var(--border-strong);
-  background: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-.subtask-check.done {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.subtask-check.done::after {
-  content: '';
-  width: 5px;
-  height: 3px;
-  border-left: 1.5px solid white;
-  border-bottom: 1.5px solid white;
-  transform: rotate(-45deg) translateY(-1px);
-  display: block;
-}
-.subtask-text {
-  flex: 1;
-  font-size: 13px;
-  color: var(--text);
-}
+.subtask-item-row { display: flex; align-items: center; gap: 8px; width: 100%; }
+.subtask-check { width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid var(--border-strong); background: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.subtask-check.done { background: var(--accent); border-color: var(--accent); }
+.subtask-check.done::after { content: ''; width: 5px; height: 3px; border-left: 1.5px solid white; border-bottom: 1.5px solid white; transform: rotate(-45deg) translateY(-1px); display: block; }
+.subtask-text { flex: 1; font-size: 13px; color: var(--text); cursor: pointer; }
 .subtask-text.done { text-decoration: line-through; color: var(--text-faint); }
-.subtask-del {
-  width: 20px;
-  height: 20px;
-  border: none;
-  background: none;
-  color: var(--text-faint);
-  cursor: pointer;
-  font-size: 12px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.12s;
-}
+
+/* Progress dot */
+.subtask-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; cursor: pointer; border: none; padding: 0; transition: all 0.15s; }
+.subtask-dot.not-started { background: var(--border-strong); }
+.subtask-dot.in-progress { background: #f59e0b; }
+.subtask-dot.done-dot { background: var(--accent); }
+
+.subtask-del { width: 20px; height: 20px; border: none; background: none; color: var(--text-faint); cursor: pointer; font-size: 12px; border-radius: 4px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.12s; }
 .subtask-item:hover .subtask-del { opacity: 1; }
-.subtask-add-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-.subtask-input {
-  flex: 1;
-  border: 0.5px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 5px 8px;
-  font-family: var(--font);
-  font-size: 13px;
-  color: var(--text);
-  background: var(--surface);
-}
+
+/* Subtask notes */
+.subtask-notes-panel { display: none; margin-top: 6px; margin-left: 23px; }
+.subtask-notes-panel.open { display: block; }
+.subtask-note-input { width: 100%; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 5px 8px; font-family: var(--font); font-size: 12px; color: var(--text); background: var(--surface2); resize: vertical; min-height: 48px; }
+.subtask-note-input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+.subtask-note-hint { font-size: 10px; color: var(--text-faint); margin-top: 3px; }
+
+.subtask-add-row { display: flex; gap: 6px; margin-top: 6px; }
+.subtask-input { flex: 1; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 5px 8px; font-family: var(--font); font-size: 13px; color: var(--text); background: var(--surface); }
 .subtask-input:focus { outline: none; border-color: var(--accent); }
-.subtask-add-btn {
-  padding: 5px 10px;
-  border-radius: var(--radius-sm);
-  border: 0.5px solid var(--accent);
-  background: var(--accent-bg);
-  color: var(--accent-text);
-  font-size: 12px;
-  font-family: var(--font);
-  cursor: pointer;
-  white-space: nowrap;
-}
+.subtask-add-btn { padding: 5px 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--accent); background: var(--accent-bg); color: var(--accent-text); font-size: 12px; font-family: var(--font); cursor: pointer; white-space: nowrap; }
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }
@@ -1037,12 +972,22 @@ function renderTask(task, list) {
     <div class="expand-row">
       <div class="expand-label">Subtasks</div>
       <div class="subtask-list" id="subtasks-${task.id}">
-        ${subtasks.map((s, i) => `
-          <div class="subtask-item">
-            <button class="subtask-check${s.done ? ' done' : ''}" onclick="toggleSubtask('${list}','${task.id}',${i})"></button>
-            <span class="subtask-text${s.done ? ' done' : ''}">${escHtml(s.name)}</span>
-            <button class="subtask-del" onclick="deleteSubtask('${list}','${task.id}',${i})">✕</button>
-          </div>`).join('')}
+        ${subtasks.map((s, i) => {
+          const dotClass = s.done ? 'done-dot' : (s.progress === 'in-progress' ? 'in-progress' : 'not-started');
+          return `
+          <div class="subtask-item" id="subtask-item-${task.id}-${i}">
+            <div class="subtask-item-row">
+              <button class="subtask-check${s.done ? ' done' : ''}" onclick="toggleSubtask('${list}','${task.id}',${i})"></button>
+              <button class="subtask-dot ${dotClass}" onclick="cycleSubtaskProgress('${list}','${task.id}',${i})" title="Click to change progress"></button>
+              <span class="subtask-text${s.done ? ' done' : ''}" onclick="toggleSubtaskNotes('${task.id}',${i})">${escHtml(s.name)}</span>
+              <button class="subtask-del" onclick="deleteSubtask('${list}','${task.id}',${i})">✕</button>
+            </div>
+            <div class="subtask-notes-panel" id="subtask-notes-${task.id}-${i}">
+              <textarea class="subtask-note-input" placeholder="Progress notes..." onchange="updateSubtaskNote('${list}','${task.id}',${i},this.value)">${escHtml(s.note || '')}</textarea>
+              <div class="subtask-note-hint">Click task name again to hide</div>
+            </div>
+          </div>`;
+        }).join('')}
       </div>
       <div class="subtask-add-row">
         <input class="subtask-input" id="subtask-input-${task.id}" placeholder="Add a subtask..." onkeydown="subtaskKeydown(event,'${list}','${task.id}')" />
@@ -1179,11 +1124,10 @@ function addSubtask(list, taskId) {
   const task = localData[list].find(t => t.id === taskId);
   if (!task) return;
   if (!task.subtasks) task.subtasks = [];
-  task.subtasks.push({ name, done: false });
+  task.subtasks.push({ name, done: false, progress: 'not-started', note: '' });
   input.value = '';
   saveData();
   renderList(list);
-  // Re-expand and refocus
   setTimeout(() => {
     const panel = document.getElementById('expand-' + taskId);
     if (panel) panel.classList.add('open');
@@ -1196,12 +1140,41 @@ function toggleSubtask(list, taskId, index) {
   const task = localData[list].find(t => t.id === taskId);
   if (!task || !task.subtasks) return;
   task.subtasks[index].done = !task.subtasks[index].done;
+  task.subtasks[index].progress = task.subtasks[index].done ? 'done' : 'not-started';
   saveData();
   renderList(list);
   setTimeout(() => {
     const panel = document.getElementById('expand-' + taskId);
     if (panel) panel.classList.add('open');
   }, 50);
+}
+
+function cycleSubtaskProgress(list, taskId, index) {
+  const task = localData[list].find(t => t.id === taskId);
+  if (!task || !task.subtasks) return;
+  const s = task.subtasks[index];
+  const cycle = ['not-started', 'in-progress', 'done'];
+  const current = cycle.indexOf(s.progress || 'not-started');
+  s.progress = cycle[(current + 1) % cycle.length];
+  s.done = s.progress === 'done';
+  saveData();
+  renderList(list);
+  setTimeout(() => {
+    const panel = document.getElementById('expand-' + taskId);
+    if (panel) panel.classList.add('open');
+  }, 50);
+}
+
+function toggleSubtaskNotes(taskId, index) {
+  const panel = document.getElementById('subtask-notes-' + taskId + '-' + index);
+  if (panel) panel.classList.toggle('open');
+}
+
+function updateSubtaskNote(list, taskId, index, val) {
+  const task = localData[list].find(t => t.id === taskId);
+  if (!task || !task.subtasks) return;
+  task.subtasks[index].note = val;
+  saveData();
 }
 
 function deleteSubtask(list, taskId, index) {
