@@ -299,10 +299,40 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .add-input{font-size:16px;}
   .rollover-banner{flex-direction:column;align-items:flex-start;}
   .rollover-btns{align-self:flex-end;}
-}
+/* ── LOGIN SCREEN ── */
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+.login-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:32px 28px;width:100%;max-width:360px;text-align:center;}
+.login-logo{font-family:var(--font-display);font-size:32px;font-weight:600;font-style:italic;color:var(--text);margin-bottom:4px;}
+.login-logo span{color:var(--accent);font-style:normal;}
+.login-tagline{font-size:13px;color:var(--text-faint);margin-bottom:28px;}
+.login-field{width:100%;border:0.5px solid var(--border-strong);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);background:var(--surface);margin-bottom:10px;transition:border-color .15s;}
+.login-field:focus{outline:none;border-color:var(--accent);}
+.login-btn{width:100%;padding:11px;background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:background .15s;margin-top:4px;}
+.login-btn:hover{background:var(--accent-text);}
+.login-err{font-size:12px;color:#dc2626;margin-top:8px;min-height:16px;}
+.sign-out-btn{position:fixed;bottom:20px;right:16px;font-size:11px;color:var(--text-faint);background:none;border:0.5px solid var(--border-strong);border-radius:99px;padding:4px 10px;cursor:pointer;font-family:var(--font);display:none;z-index:100;}
+.sign-out-btn:hover{color:var(--text-muted);}
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen" style="display:flex">
+  <div class="login-card">
+    <div class="login-logo">Day<span>flow</span></div>
+    <div class="login-tagline">Your personal planning space</div>
+    <input id="loginEmail" class="login-field" type="email" placeholder="Email" autocomplete="email"/>
+    <input id="loginPass" class="login-field" type="password" placeholder="Password" autocomplete="current-password"/>
+    <button class="login-btn" onclick="doLogin()">Sign in</button>
+    <div id="loginErr" class="login-err"></div>
+  </div>
+</div>
+
+<!-- SIGN OUT BUTTON -->
+<button id="signOutBtn" class="sign-out-btn" onclick="doSignOut()">Sign out</button>
+
+<!-- APP -->
+<div id="appRoot" style="display:none">
 <div class="app">
 
   <div class="app-header">
@@ -413,22 +443,123 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
   </div>
 
-</div>
+</div><!-- end .app -->
+</div><!-- end #appRoot -->
 
-<script>
+<script type="module">
+// ─── FIREBASE ────────────────────────────────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCHXrvWqjCLZ_HRUi73VyMQczA-mhzDG4E",
+  authDomain: "dayflow-a6c1c.firebaseapp.com",
+  projectId: "dayflow-a6c1c",
+  storageBucket: "dayflow-a6c1c.firebasestorage.app",
+  messagingSenderId: "536169443905",
+  appId: "1:536169443905:web:f1495109febcc6dca3ccc0"
+};
+const fbApp  = initializeApp(firebaseConfig);
+const auth   = getAuth(fbApp);
+const db     = getFirestore(fbApp);
+
+let currentUser = null;
+
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const CATS = ['Grocery','Home','Clothes','Other'];
 let selCat = 'Grocery', filterCat = 'All', weekOffset = 0;
 let data = { today:[], master:[], tobuy:[], pad:'' };
 
-function save() { localStorage.setItem('dayflow_v2', JSON.stringify(data)); }
-function load() {
-  try { const s = localStorage.getItem('dayflow_v2'); if (s) data = JSON.parse(s); } catch(e){}
+// Save: Firestore first, localStorage as fallback
+let saveTimer = null;
+function save() {
+  // Always mirror to localStorage immediately
+  localStorage.setItem('dayflow_v2', JSON.stringify(data));
+  // Debounce Firestore writes (avoid hammering on every keystroke)
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    if (!currentUser) return;
+    try {
+      await setDoc(doc(db, 'dayflow', currentUser.uid), { data: JSON.stringify(data) });
+    } catch(e) { console.warn('Firestore save failed, localStorage intact', e); }
+  }, 800);
+}
+
+async function loadFromFirestore() {
+  if (!currentUser) return false;
+  try {
+    const snap = await getDoc(doc(db, 'dayflow', currentUser.uid));
+    if (snap.exists()) {
+      const parsed = JSON.parse(snap.data().data);
+      if (parsed) { data = parsed; normaliseData(); return true; }
+    }
+  } catch(e) { console.warn('Firestore load failed, falling back to localStorage', e); }
+  return false;
+}
+
+function loadFromLocal() {
+  try { const s = localStorage.getItem('dayflow_v2'); if (s) { data = JSON.parse(s); } } catch(e){}
+  normaliseData();
+}
+
+function normaliseData() {
   if (!Array.isArray(data.today))  data.today  = [];
   if (!Array.isArray(data.master)) data.master = [];
   if (!Array.isArray(data.tobuy))  data.tobuy  = [];
   if (!data.pad) data.pad = '';
 }
+
+// ─── AUTH UI ─────────────────────────────────────────────────────────────────
+function showLoginScreen() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('appRoot').style.display = 'none';
+}
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appRoot').style.display = 'block';
+  document.getElementById('signOutBtn').style.display = 'block';
+}
+
+window.doLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  const err   = document.getElementById('loginErr');
+  err.textContent = '';
+  if (!email || !pass) { err.textContent = 'Please enter your email and password.'; return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    err.textContent = e.code === 'auth/invalid-credential'
+      ? 'Incorrect email or password.'
+      : 'Login failed — please try again.';
+  }
+};
+window.doSignOut = async function() {
+  await signOut(auth);
+  showLoginScreen();
+};
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
+    doLogin();
+  }
+});
+
+// ─── AUTH STATE ──────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    currentUser = user;
+    showApp();
+    const fromCloud = await loadFromFirestore();
+    if (!fromCloud) loadFromLocal();
+    initApp();
+  } else {
+    currentUser = null;
+    showLoginScreen();
+  }
+});
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 const todayStr = () => new Date().toISOString().slice(0,10);
@@ -463,9 +594,8 @@ function weekDates(offset) {
   return Array.from({length:7},(_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return d.toISOString().slice(0,10); });
 }
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
-function init() {
-  load();
+// ─── INIT (called after auth + data load) ────────────────────────────────────
+function initApp() {
   const now = new Date();
   document.getElementById('todayLabel').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('greetingLine').textContent = greeting();
@@ -974,8 +1104,7 @@ document.addEventListener('keydown', e => {
   if(e.key==='Enter'){e.preventDefault();addTask(list);}
   if(e.key==='Escape') hideAdd(list);
 });
-
-init();
+// initApp() is called by onAuthStateChanged after login
 </script>
 </body>
 </html>
