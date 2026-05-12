@@ -1158,6 +1158,23 @@ document.addEventListener('keydown', e => {
   if(e.key==='Enter'){e.preventDefault();addTask(list);}
   if(e.key==='Escape') hideAdd(list);
 });
+
+// ─── EXPOSE TO WINDOW (required for onclick in HTML with type="module") ──────
+Object.assign(window, {
+  switchTab, switchTabByName, savePad,
+  dismissRollover, keepRollover,
+  showAdd, hideAdd, selCatFn, addTask,
+  shiftWeek, toggleDayBody, weekCheck,
+  toggleMoveMenu, moveDay, removeFromDay,
+  showDayAdd, hideDayAdd, dayAddKey,
+  togglePull, pullToDay,
+  toggleComplete, homeCheck, delTask,
+  updateNote, toggleExpand,
+  schedTask, schedToDate, clearSched,
+  setFilter,
+  nudgeDismiss, nudgeSendToMaster,
+  doLogin, doSignOut,
+});
 // initApp() is called by onAuthStateChanged after login
 </script>
 </body>
