@@ -299,19 +299,59 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .add-input{font-size:16px;}
   .rollover-banner{flex-direction:column;align-items:flex-start;}
   .rollover-btns{align-self:flex-end;}
+}
+
 /* ── LOGIN SCREEN ── */
-.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
-.login-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:32px 28px;width:100%;max-width:360px;text-align:center;}
-.login-logo{font-family:var(--font-display);font-size:32px;font-weight:600;font-style:italic;color:var(--text);margin-bottom:4px;}
-.login-logo span{color:var(--accent);font-style:normal;}
-.login-tagline{font-size:13px;color:var(--text-faint);margin-bottom:28px;}
-.login-field{width:100%;border:0.5px solid var(--border-strong);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);background:var(--surface);margin-bottom:10px;transition:border-color .15s;}
-.login-field:focus{outline:none;border-color:var(--accent);}
-.login-btn{width:100%;padding:11px;background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:background .15s;margin-top:4px;}
-.login-btn:hover{background:var(--accent-text);}
-.login-err{font-size:12px;color:#dc2626;margin-top:8px;min-height:16px;}
-.sign-out-btn{position:fixed;bottom:20px;right:16px;font-size:11px;color:var(--text-faint);background:none;border:0.5px solid var(--border-strong);border-radius:99px;padding:4px 10px;cursor:pointer;font-family:var(--font);display:none;z-index:100;}
-.sign-out-btn:hover{color:var(--text-muted);}
+.login-screen{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;background:var(--bg);
+}
+.login-card{
+  width:100%;max-width:380px;
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:16px;
+  padding:40px 36px 36px;
+  text-align:center;
+  box-shadow:0 4px 32px rgba(196,92,42,0.07);
+}
+.login-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:56px;height:56px;
+  background:var(--accent);border-radius:14px;
+  margin-bottom:16px;
+}
+.login-mark svg{width:32px;height:32px;}
+.login-title{
+  font-family:var(--font-display);font-size:28px;font-weight:600;
+  font-style:italic;color:var(--text);margin-bottom:4px;line-height:1.2;
+}
+.login-title span{color:var(--accent);font-style:normal;}
+.login-sub{font-size:13px;color:var(--text-faint);margin-bottom:32px;}
+.login-field-wrap{position:relative;margin-bottom:12px;text-align:left;}
+.login-field-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint);margin-bottom:5px;display:block;}
+.login-field{
+  width:100%;border:0.5px solid var(--border-strong);border-radius:var(--radius-sm);
+  padding:11px 13px;font-family:var(--font);font-size:14px;color:var(--text);
+  background:var(--surface);transition:border-color .15s,box-shadow .15s;
+}
+.login-field:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(196,92,42,0.1);}
+.login-field::placeholder{color:var(--text-faint);}
+.login-btn{
+  width:100%;padding:12px;background:var(--accent);color:white;border:none;
+  border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:500;
+  cursor:pointer;transition:background .15s;margin-top:8px;letter-spacing:0.01em;
+}
+.login-btn:hover{background:#a84a20;}
+.login-btn:active{background:var(--accent-text);}
+.login-err{font-size:12px;color:#c0392b;margin-top:10px;min-height:16px;line-height:1.4;}
+.sign-out-btn{
+  position:fixed;bottom:20px;right:16px;font-size:11px;color:var(--text-faint);
+  background:var(--surface);border:0.5px solid var(--border-strong);
+  border-radius:99px;padding:5px 12px;cursor:pointer;font-family:var(--font);
+  display:none;z-index:100;transition:all .12s;
+}
+.sign-out-btn:hover{color:var(--text-muted);border-color:var(--border);}
 </style>
 </head>
 <body>
@@ -319,10 +359,24 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="login-screen" style="display:flex">
   <div class="login-card">
-    <div class="login-logo">Day<span>flow</span></div>
-    <div class="login-tagline">Your personal planning space</div>
-    <input id="loginEmail" class="login-field" type="email" placeholder="Email" autocomplete="email"/>
-    <input id="loginPass" class="login-field" type="password" placeholder="Password" autocomplete="current-password"/>
+    <div class="login-mark">
+      <svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg">
+        <rect x="40" y="40" width="600" height="600" rx="130" fill="#fdf8f3" opacity="0.15"/>
+        <rect x="210" y="195" width="42" height="295" rx="8" fill="#fdf8f3"/>
+        <path d="M250 195 Q440 195 440 342 Q440 490 250 490" fill="none" stroke="#fdf8f3" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M230 555 Q340 520 450 555" fill="none" stroke="#fdf8f3" stroke-width="10" stroke-linecap="round" stroke-dasharray="18 12" opacity=".7"/>
+      </svg>
+    </div>
+    <div class="login-title">Day<span>flow</span></div>
+    <div class="login-sub">Your personal planning space</div>
+    <div class="login-field-wrap">
+      <label class="login-field-label" for="loginEmail">Email</label>
+      <input id="loginEmail" class="login-field" type="email" placeholder="you@example.com" autocomplete="email"/>
+    </div>
+    <div class="login-field-wrap">
+      <label class="login-field-label" for="loginPass">Password</label>
+      <input id="loginPass" class="login-field" type="password" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
     <button class="login-btn" onclick="doLogin()">Sign in</button>
     <div id="loginErr" class="login-err"></div>
   </div>
