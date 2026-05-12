@@ -4,10 +4,58 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Dayflow</title>
-<meta name="theme-color" content="#fdf8f3"/>
+<meta name="theme-color" content="#c45c2a"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Dayflow"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 680'%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='%23c45c2a'/%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='none' stroke='%23e07848' stroke-width='2' opacity='.4'/%3E%3Crect x='210' y='195' width='42' height='295' rx='8' fill='%23fdf8f3'/%3E%3Cpath d='M250 195 Q440 195 440 342 Q440 490 250 490' fill='none' stroke='%23fdf8f3' stroke-width='42' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M230 555 Q340 520 450 555' fill='none' stroke='%23fdf8f3' stroke-width='10' stroke-linecap='round' stroke-dasharray='18 12' opacity='.55'/%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 680'%3E%3Crect width='680' height='680' rx='0' fill='%23c45c2a'/%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='%23c45c2a'/%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='none' stroke='%23e07848' stroke-width='2' opacity='.4'/%3E%3Crect x='210' y='195' width='42' height='295' rx='8' fill='%23fdf8f3'/%3E%3Cpath d='M250 195 Q440 195 440 342 Q440 490 250 490' fill='none' stroke='%23fdf8f3' stroke-width='42' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M230 555 Q340 520 450 555' fill='none' stroke='%23fdf8f3' stroke-width='10' stroke-linecap='round' stroke-dasharray='18 12' opacity='.55'/%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script>
+// Generate a 512x512 PNG icon at runtime for full PWA/home screen support
+(function(){
+  try {
+    const c = document.createElement('canvas');
+    c.width = c.height = 512;
+    const ctx = c.getContext('2d');
+    const r = 512, rr = 98;
+    ctx.beginPath();
+    ctx.moveTo(rr, 0); ctx.lineTo(r-rr, 0); ctx.quadraticCurveTo(r,0,r,rr);
+    ctx.lineTo(r,r-rr); ctx.quadraticCurveTo(r,r,r-rr,r);
+    ctx.lineTo(rr,r); ctx.quadraticCurveTo(0,r,0,r-rr);
+    ctx.lineTo(0,rr); ctx.quadraticCurveTo(0,0,rr,0);
+    ctx.closePath();
+    ctx.fillStyle = '#c45c2a'; ctx.fill();
+    ctx.fillStyle = '#fdf8f3';
+    ctx.beginPath(); ctx.roundRect(158,147,32,222,6); ctx.fill();
+    ctx.strokeStyle = '#fdf8f3'; ctx.lineWidth = 32; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(188,147); ctx.quadraticCurveTo(332,147,332,258); ctx.quadraticCurveTo(332,369,188,369); ctx.stroke();
+    ctx.strokeStyle = 'rgba(253,248,243,0.55)'; ctx.lineWidth = 8; ctx.lineCap = 'round';
+    ctx.setLineDash([14,9]);
+    ctx.beginPath(); ctx.moveTo(174,419); ctx.quadraticCurveTo(256,392,340,419); ctx.stroke();
+    ctx.setLineDash([]);
+    const url = c.toDataURL('image/png');
+    const lnk = document.createElement('link');
+    lnk.rel = 'apple-touch-icon'; lnk.href = url;
+    document.head.appendChild(lnk);
+    const lnk2 = document.createElement('link');
+    lnk2.rel = 'icon'; lnk2.type = 'image/png'; lnk2.sizes = '512x512'; lnk2.href = url;
+    document.head.appendChild(lnk2);
+    // Inline web app manifest for Android / Chrome "Add to Home Screen"
+    const manifest = {
+      name: 'Dayflow', short_name: 'Dayflow',
+      start_url: '.', display: 'standalone',
+      background_color: '#c45c2a', theme_color: '#c45c2a',
+      icons: [{ src: url, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }]
+    };
+    const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+    const mUrl = URL.createObjectURL(blob);
+    const ml = document.createElement('link');
+    ml.rel = 'manifest'; ml.href = mUrl;
+    document.head.appendChild(ml);
+  } catch(e){}
+})();
+</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
