@@ -135,6 +135,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .rollover-btn{padding:4px 10px;border-radius:99px;border:0.5px solid var(--amber);background:none;font-size:11px;color:var(--amber);cursor:pointer;font-family:var(--font);white-space:nowrap;}
 .rollover-btn.primary{background:var(--amber);color:white;}
 
+/* ── INLINE EDIT ── */
+.task-name-input{width:100%;border:none;border-bottom:1px solid var(--accent);background:none;font-family:var(--font);font-size:14px;font-weight:500;color:var(--text);padding:0 0 2px;outline:none;}
+.task-body{flex:1;min-width:0;cursor:pointer;}
+.task-body:hover .task-name:not(.done){color:var(--accent);}
+
 /* ── PROCRASTINATION NUDGE ── */
 .nudge{margin-top:6px;padding:8px 10px;background:var(--amber-light);border:0.5px solid rgba(180,83,9,0.18);border-radius:var(--radius-sm);display:flex;align-items:flex-start;gap:8px;}
 .nudge-icon{font-size:13px;flex-shrink:0;margin-top:1px;}
@@ -1035,7 +1040,7 @@ function taskCard(task, list) {
       onchange="updateNote('${list}','${task.id}',this.value)">${esc(task.note||'')}</textarea>
   </div>`;
 
-  // Procrastination nudge (shown inline below task name, outside expand panel)
+  // Procrastination nudge
   const showNudge = !task.completed && (task.rolloverCount||0) >= 2 && !task.nudgeDismissed;
   const nudgeHTML = showNudge ? `
     <div class="nudge" id="nudge-${task.id}">
@@ -1053,13 +1058,13 @@ function taskCard(task, list) {
   return `<div class="task-card${task.completed?' completed':''}" id="card-${task.id}">
     <div class="task-top">
       <button class="check-btn${task.completed?' done':''}" onclick="toggleComplete('${list}','${task.id}')"></button>
-      <div class="task-body">
-        <div class="task-name${task.completed?' done':''}">${esc(task.name)}</div>
+      <div class="task-body" onclick="toggleExpand('${task.id}')">
+        <div class="task-name${task.completed?' done':''}" id="tname-${task.id}">${esc(task.name)}</div>
         ${(badge||catB)?`<div class="task-meta">${badge}${catB}</div>`:''}
       </div>
       <div class="task-actions">
-        <button class="icon-btn" onclick="toggleExpand('${task.id}')">✎</button>
-        <button class="icon-btn" onclick="delTask('${list}','${task.id}')">✕</button>
+        <button class="icon-btn" onclick="startRename('${list}','${task.id}')" title="Rename">✎</button>
+        <button class="icon-btn" onclick="delTask('${list}','${task.id}')" title="Delete">✕</button>
       </div>
     </div>
     ${nudgeHTML}
@@ -1089,6 +1094,25 @@ function updateNote(list, id, val) {
 }
 function toggleExpand(id) {
   const p=document.getElementById('exp-'+id); if(p) p.classList.toggle('open');
+}
+function startRename(list, id) {
+  const nameEl = document.getElementById('tname-'+id);
+  if (!nameEl) return;
+  const task = findTask(id); if (!task) return;
+  const current = task.name;
+  nameEl.outerHTML = `<input class="task-name-input" id="tname-${id}"
+    value="${esc(current)}"
+    onblur="finishRename('${list}','${id}',this.value)"
+    onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}if(event.key==='Escape'){this.value='${esc(current)}';this.blur();}"
+  />`;
+  setTimeout(()=>{ const inp=document.getElementById('tname-'+id); if(inp){inp.focus();inp.select();} },30);
+}
+function finishRename(list, id, val) {
+  const name = val.trim();
+  const task = data[list] ? data[list].find(t=>t.id===id) : findTask(id);
+  if (task && name && name !== task.name) { task.name=name; save(); }
+  // Re-render the list to restore the div (replaces the input)
+  renderList(list);
 }
 function schedTask(id, ds) {
   const task=data.master.find(t=>t.id===id); if(!task) return;
@@ -1170,6 +1194,7 @@ Object.assign(window, {
   togglePull, pullToDay,
   toggleComplete, homeCheck, delTask,
   updateNote, toggleExpand,
+  startRename, finishRename,
   schedTask, schedToDate, clearSched,
   setFilter,
   nudgeDismiss, nudgeSendToMaster,
