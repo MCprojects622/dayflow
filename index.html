@@ -473,6 +473,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <button class="btn btn-primary" onclick="addTask('tobuy')">Add</button>
       </div>
     </div>
+  </div>
+
   <!-- NOTES -->
   <div id="tab-notes" class="section">
 
@@ -531,7 +533,9 @@ let currentUser = null;
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const CATS = ['Grocery','Home','Clothes','Other'];
 let selCat = 'Grocery', filterCat = 'All', weekOffset = 0;
-let data = { today:[], master:[], tobuy:[], pad:'' };
+let activeNoteId = null;
+let noteAutoSaveTimer = null;
+let data = { today:[], master:[], tobuy:[], notes:[], pad:'' };
 
 // Save: Firestore first, localStorage as fallback
 let saveTimer = null;
@@ -1185,9 +1189,6 @@ function nudgeSendToMaster(taskId) {
 }
 
 // ─── NOTES ───────────────────────────────────────────────────────────────────
-let activeNoteId = null;
-let noteAutoSaveTimer = null;
-
 function renderNotes() {
   const notes = (data.notes || []).slice().sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
   const container = document.getElementById('notesList');
