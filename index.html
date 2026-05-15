@@ -8,54 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Dayflow"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 680'%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='%23c45c2a'/%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='none' stroke='%23e07848' stroke-width='2' opacity='.4'/%3E%3Crect x='210' y='195' width='42' height='295' rx='8' fill='%23fdf8f3'/%3E%3Cpath d='M250 195 Q440 195 440 342 Q440 490 250 490' fill='none' stroke='%23fdf8f3' stroke-width='42' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M230 555 Q340 520 450 555' fill='none' stroke='%23fdf8f3' stroke-width='10' stroke-linecap='round' stroke-dasharray='18 12' opacity='.55'/%3E%3C/svg%3E"/>
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 680'%3E%3Crect width='680' height='680' rx='0' fill='%23c45c2a'/%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='%23c45c2a'/%3E%3Crect x='40' y='40' width='600' height='600' rx='130' fill='none' stroke='%23e07848' stroke-width='2' opacity='.4'/%3E%3Crect x='210' y='195' width='42' height='295' rx='8' fill='%23fdf8f3'/%3E%3Cpath d='M250 195 Q440 195 440 342 Q440 490 250 490' fill='none' stroke='%23fdf8f3' stroke-width='42' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M230 555 Q340 520 450 555' fill='none' stroke='%23fdf8f3' stroke-width='10' stroke-linecap='round' stroke-dasharray='18 12' opacity='.55'/%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script>
-// Generate a 512x512 PNG icon at runtime for full PWA/home screen support
-(function(){
-  try {
-    const c = document.createElement('canvas');
-    c.width = c.height = 512;
-    const ctx = c.getContext('2d');
-    const r = 512, rr = 98;
-    ctx.beginPath();
-    ctx.moveTo(rr, 0); ctx.lineTo(r-rr, 0); ctx.quadraticCurveTo(r,0,r,rr);
-    ctx.lineTo(r,r-rr); ctx.quadraticCurveTo(r,r,r-rr,r);
-    ctx.lineTo(rr,r); ctx.quadraticCurveTo(0,r,0,r-rr);
-    ctx.lineTo(0,rr); ctx.quadraticCurveTo(0,0,rr,0);
-    ctx.closePath();
-    ctx.fillStyle = '#c45c2a'; ctx.fill();
-    ctx.fillStyle = '#fdf8f3';
-    ctx.beginPath(); ctx.roundRect(158,147,32,222,6); ctx.fill();
-    ctx.strokeStyle = '#fdf8f3'; ctx.lineWidth = 32; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.beginPath(); ctx.moveTo(188,147); ctx.quadraticCurveTo(332,147,332,258); ctx.quadraticCurveTo(332,369,188,369); ctx.stroke();
-    ctx.strokeStyle = 'rgba(253,248,243,0.55)'; ctx.lineWidth = 8; ctx.lineCap = 'round';
-    ctx.setLineDash([14,9]);
-    ctx.beginPath(); ctx.moveTo(174,419); ctx.quadraticCurveTo(256,392,340,419); ctx.stroke();
-    ctx.setLineDash([]);
-    const url = c.toDataURL('image/png');
-    const lnk = document.createElement('link');
-    lnk.rel = 'apple-touch-icon'; lnk.href = url;
-    document.head.appendChild(lnk);
-    const lnk2 = document.createElement('link');
-    lnk2.rel = 'icon'; lnk2.type = 'image/png'; lnk2.sizes = '512x512'; lnk2.href = url;
-    document.head.appendChild(lnk2);
-    // Inline web app manifest for Android / Chrome "Add to Home Screen"
-    const manifest = {
-      name: 'Dayflow', short_name: 'Dayflow',
-      start_url: '.', display: 'standalone',
-      background_color: '#c45c2a', theme_color: '#c45c2a',
-      icons: [{ src: url, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }]
-    };
-    const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
-    const mUrl = URL.createObjectURL(blob);
-    const ml = document.createElement('link');
-    ml.rel = 'manifest'; ml.href = mUrl;
-    document.head.appendChild(ml);
-  } catch(e){}
-})();
-</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -306,6 +259,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .rollover-btns{align-self:flex-end;}
 }
 
+/* ── NOTES ── */
+.note-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+.note-card:hover{box-shadow:0 2px 12px rgba(160,110,70,0.09);border-color:var(--border-strong);}
+.note-card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.note-card-title.untitled{color:var(--text-faint);font-weight:400;font-style:italic;}
+.note-card-preview{font-size:12px;color:var(--text-faint);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.note-card-date{font-size:10px;font-family:var(--font-mono);color:var(--text-faint);margin-top:8px;}
+.note-title-input{width:100%;border:none;background:none;font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--text);padding:0;line-height:1.3;font-style:italic;}
+.note-title-input:focus{outline:none;}
+.note-title-input::placeholder{color:var(--text-faint);font-weight:400;}
+.note-body-input{width:100%;min-height:calc(100vh - 260px);border:none;background:none;font-family:var(--font);font-size:14px;color:var(--text);line-height:1.75;resize:none;padding:0;}
+.note-body-input:focus{outline:none;}
+.note-body-input::placeholder{color:var(--text-faint);}
+.note-meta-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:0.5px solid var(--border);}
+.note-meta-row span{font-size:11px;font-family:var(--font-mono);color:var(--text-faint);}
+.notes-empty{text-align:center;padding:48px 20px;color:var(--text-faint);font-size:13px;}
+.notes-empty-icon{font-size:30px;margin-bottom:10px;}
+.notes-empty-btn{margin-top:16px;padding:9px 20px;background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;}
+.notes-empty-btn:hover{background:#a84a20;}
 /* ── LOGIN SCREEN ── */
 .login-screen{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -408,6 +380,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <button class="tab-btn" onclick="switchTab('today',this)">Today</button>
     <button class="tab-btn" onclick="switchTab('master',this)">Master</button>
     <button class="tab-btn" onclick="switchTab('tobuy',this)">To Buy</button>
+    <button class="tab-btn" onclick="switchTab('notes',this)">Notes</button>
   </div>
 
   <!-- HOME -->
@@ -500,6 +473,34 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <button class="btn btn-primary" onclick="addTask('tobuy')">Add</button>
       </div>
     </div>
+  <!-- NOTES -->
+  <div id="tab-notes" class="section">
+
+    <!-- Note list view -->
+    <div id="notesListView">
+      <div class="section-header">
+        <span class="section-label">Notes</span>
+      </div>
+      <div id="notesList"></div>
+      <button class="add-trigger" onclick="newNote()">+ New note</button>
+    </div>
+
+    <!-- Note detail view (full open note) -->
+    <div id="noteDetailView" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <button class="icon-btn" onclick="closeNote()" style="color:var(--accent);font-size:16px;" title="Back">←</button>
+        <div style="flex:1;">
+          <input id="noteTitleInput" class="note-title-input" placeholder="Untitled note" oninput="noteChanged()"/>
+        </div>
+        <button class="icon-btn" onclick="deleteNote()" title="Delete note" style="color:var(--text-faint);">✕</button>
+      </div>
+      <textarea id="noteBodyInput" class="note-body-input" placeholder="Start writing…" oninput="noteChanged()"></textarea>
+      <div class="note-meta-row">
+        <span id="noteMetaDate"></span>
+        <span id="noteSavedIndicator"></span>
+      </div>
+    </div>
+
   </div>
 
 </div><!-- end .app -->
@@ -568,6 +569,7 @@ function normaliseData() {
   if (!Array.isArray(data.today))  data.today  = [];
   if (!Array.isArray(data.master)) data.master = [];
   if (!Array.isArray(data.tobuy))  data.tobuy  = [];
+  if (!Array.isArray(data.notes))  data.notes  = [];
   if (!data.pad) data.pad = '';
 }
 
@@ -674,9 +676,17 @@ function switchTab(name, btn) {
   if (btn) btn.classList.add('active');
   if (name==='week') renderWeek();
   if (name==='home') renderHome();
+  if (name==='notes') {
+    // Reset to list view when switching to notes tab
+    if (!activeNoteId) {
+      document.getElementById('notesListView').style.display = 'block';
+      document.getElementById('noteDetailView').style.display = 'none';
+    }
+    renderNotes();
+  }
 }
 function switchTabByName(name) {
-  switchTab(name, document.querySelectorAll('.tab-btn')[{home:0,week:1,today:2,master:3,tobuy:4}[name]]);
+  switchTab(name, document.querySelectorAll('.tab-btn')[{home:0,week:1,today:2,master:3,tobuy:4,notes:5}[name]]);
 }
 
 // ─── SCRATCH PAD ─────────────────────────────────────────────────────────────
@@ -1134,7 +1144,7 @@ function renderList(list) {
   else if(list==='master') renderMaster();
   else if(list==='tobuy') renderTobuy();
 }
-function renderAll() { renderHome(); renderWeek(); renderToday(); renderMaster(); renderTobuy(); }
+function renderAll() { renderHome(); renderWeek(); renderToday(); renderMaster(); renderTobuy(); renderNotes(); }
 
 // ─── PROCRASTINATION NUDGE ───────────────────────────────────────────────────
 const NUDGE_MSGS = [
@@ -1174,6 +1184,112 @@ function nudgeSendToMaster(taskId) {
   renderAll();
 }
 
+// ─── NOTES ───────────────────────────────────────────────────────────────────
+let activeNoteId = null;
+let noteAutoSaveTimer = null;
+
+function renderNotes() {
+  const notes = (data.notes || []).slice().sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
+  const container = document.getElementById('notesList');
+  if (!container) return;
+  if (!notes.length) {
+    container.innerHTML = `<div class="notes-empty">
+      <div class="notes-empty-icon">📓</div>
+      <div>No notes yet — this is your space to write anything</div>
+    </div>`;
+    return;
+  }
+  container.innerHTML = notes.map(n => {
+    const title = n.title && n.title.trim() ? n.title : null;
+    const preview = (n.body || '').replace(/\n/g,' ').trim().slice(0, 100);
+    const date = n.updatedAt ? new Date(n.updatedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+    return `<div class="note-card" onclick="openNote('${n.id}')">
+      <div class="note-card-title${title?'':' untitled'}">${title ? esc(title) : 'Untitled note'}</div>
+      ${preview ? `<div class="note-card-preview">${esc(preview)}</div>` : ''}
+      <div class="note-card-date">${date}</div>
+    </div>`;
+  }).join('');
+}
+
+function newNote() {
+  if (!data.notes) data.notes = [];
+  const note = { id: uid(), title: '', body: '', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+  data.notes.unshift(note);
+  save();
+  openNote(note.id);
+}
+
+function openNote(id) {
+  if (!data.notes) return;
+  const note = data.notes.find(n => n.id === id);
+  if (!note) return;
+  activeNoteId = id;
+  document.getElementById('notesListView').style.display = 'none';
+  document.getElementById('noteDetailView').style.display = 'block';
+  document.getElementById('noteTitleInput').value = note.title || '';
+  document.getElementById('noteBodyInput').value = note.body || '';
+  const date = note.updatedAt
+    ? 'Last edited ' + new Date(note.updatedAt).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+    : '';
+  document.getElementById('noteMetaDate').textContent = date;
+  document.getElementById('noteSavedIndicator').textContent = '';
+  setTimeout(() => {
+    const body = document.getElementById('noteBodyInput');
+    if (body && !document.getElementById('noteTitleInput').value) {
+      document.getElementById('noteTitleInput').focus();
+    } else if (body) {
+      body.focus();
+      body.setSelectionRange(body.value.length, body.value.length);
+    }
+  }, 50);
+}
+
+function closeNote() {
+  // Flush any pending save immediately
+  clearTimeout(noteAutoSaveTimer);
+  saveActiveNote();
+  activeNoteId = null;
+  document.getElementById('noteDetailView').style.display = 'none';
+  document.getElementById('notesListView').style.display = 'block';
+  renderNotes();
+}
+
+function deleteNote() {
+  if (!activeNoteId) return;
+  data.notes = (data.notes || []).filter(n => n.id !== activeNoteId);
+  save();
+  activeNoteId = null;
+  document.getElementById('noteDetailView').style.display = 'none';
+  document.getElementById('notesListView').style.display = 'block';
+  renderNotes();
+}
+
+function noteChanged() {
+  clearTimeout(noteAutoSaveTimer);
+  document.getElementById('noteSavedIndicator').textContent = '';
+  noteAutoSaveTimer = setTimeout(() => {
+    saveActiveNote();
+    document.getElementById('noteSavedIndicator').textContent = 'Saved';
+    setTimeout(() => {
+      const el = document.getElementById('noteSavedIndicator');
+      if (el) el.textContent = '';
+    }, 1800);
+  }, 700);
+}
+
+function saveActiveNote() {
+  if (!activeNoteId || !data.notes) return;
+  const note = data.notes.find(n => n.id === activeNoteId);
+  if (!note) return;
+  note.title = (document.getElementById('noteTitleInput').value || '').trim();
+  note.body  = document.getElementById('noteBodyInput').value || '';
+  note.updatedAt = new Date().toISOString();
+  const date = 'Last edited ' + new Date(note.updatedAt).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const metaEl = document.getElementById('noteMetaDate');
+  if (metaEl) metaEl.textContent = date;
+  save();
+}
+
 // ─── KEYBOARD ────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   const el=document.activeElement;
@@ -1198,9 +1314,45 @@ Object.assign(window, {
   schedTask, schedToDate, clearSched,
   setFilter,
   nudgeDismiss, nudgeSendToMaster,
+  newNote, openNote, closeNote, deleteNote, noteChanged,
   doLogin, doSignOut,
 });
 // initApp() is called by onAuthStateChanged after login
+</script>
+
+<script>
+// PWA icon + manifest (runs after DOM ready, no conflict with module script)
+window.addEventListener('load', function(){
+  try {
+    const c = document.createElement('canvas');
+    c.width = c.height = 512;
+    const ctx = c.getContext('2d');
+    const r = 512, rr = 98;
+    ctx.beginPath();
+    ctx.moveTo(rr,0); ctx.lineTo(r-rr,0); ctx.quadraticCurveTo(r,0,r,rr);
+    ctx.lineTo(r,r-rr); ctx.quadraticCurveTo(r,r,r-rr,r);
+    ctx.lineTo(rr,r); ctx.quadraticCurveTo(0,r,0,r-rr);
+    ctx.lineTo(0,rr); ctx.quadraticCurveTo(0,0,rr,0);
+    ctx.closePath();
+    ctx.fillStyle='#c45c2a'; ctx.fill();
+    ctx.fillStyle='#fdf8f3';
+    ctx.beginPath(); ctx.roundRect(158,147,32,222,6); ctx.fill();
+    ctx.strokeStyle='#fdf8f3'; ctx.lineWidth=32; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(188,147); ctx.quadraticCurveTo(332,147,332,258); ctx.quadraticCurveTo(332,369,188,369); ctx.stroke();
+    ctx.strokeStyle='rgba(253,248,243,0.55)'; ctx.lineWidth=8; ctx.lineCap='round';
+    ctx.setLineDash([14,9]);
+    ctx.beginPath(); ctx.moveTo(174,419); ctx.quadraticCurveTo(256,392,340,419); ctx.stroke();
+    ctx.setLineDash([]);
+    const url = c.toDataURL('image/png');
+    const a = document.createElement('link'); a.rel='apple-touch-icon'; a.href=url; document.head.appendChild(a);
+    const f = document.createElement('link'); f.rel='icon'; f.type='image/png'; f.sizes='512x512'; f.href=url; document.head.appendChild(f);
+    const manifest = { name:'Dayflow', short_name:'Dayflow', start_url:'.', display:'standalone',
+      background_color:'#c45c2a', theme_color:'#c45c2a',
+      icons:[{src:url, sizes:'512x512', type:'image/png', purpose:'any maskable'}] };
+    const blob = new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+    const m = document.createElement('link'); m.rel='manifest'; m.href=URL.createObjectURL(blob); document.head.appendChild(m);
+  } catch(e){}
+});
 </script>
 </body>
 </html>
